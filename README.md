@@ -12,9 +12,9 @@ Open the URL Vite prints (usually `http://127.0.0.1:5173/`). The story is saved 
 
 ## Screen
 
-- **Left:** global facts, then levels and their knots.
-- **Center:** the open knot. The large gold name is the scene link.
-- **Right:** live Ink for the current level file.
+- **Left:** global facts, then levels and their knots. **Hide panel** closes it. **Show facts** on the left edge opens it again. Drag the bar on its right edge to change its width.
+- **Center:** the open knot. The large gold name is the scene link. Drag the bar on its right to give this column less room.
+- **Right:** live Ink for the current level file. Long lines wrap, so you can read them without scrolling sideways. Drag the bar on its left to make this column wider. The width is remembered.
 - **Top:** download one file, download every file, or reload the sample.
 
 ## Facts

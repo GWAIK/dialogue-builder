@@ -2,12 +2,19 @@ import { duplicateKnotNames, knotName, levelSlug } from "../model/story.ts";
 import { useStory } from "../state/useStory.ts";
 import { TextInput } from "./fields.tsx";
 
-export function Sidebar() {
+export function Sidebar({ onHide }: { onHide: () => void }) {
   const api = useStory();
   const dupes = duplicateKnotNames(api.story);
   const levels = api.story.levels.slice().sort((a, b) => a.number - b.number);
   return (
-    <aside className="flex h-full flex-col gap-6 overflow-y-auto border-r border-line bg-panel p-4">
+    <aside className="flex h-full flex-col gap-6 overflow-y-auto bg-panel p-4">
+      <button
+        type="button"
+        onClick={onHide}
+        className="self-start rounded border border-line px-2 py-1 text-xs text-muted hover:border-gold hover:text-ink"
+      >
+        Hide panel
+      </button>
       <section>
         <header className="mb-2 flex items-center justify-between">
           <h2 className="text-xs uppercase tracking-wider text-muted">Facts</h2>
