@@ -228,7 +228,8 @@ function ConditionalCard({ knotId, block }: { knotId: string; block: Conditional
               {branch.kind === "else" ? (
                 <p className="mb-2 font-mono text-xs text-gold">else</p>
               ) : (
-                <div className="mb-2 grid grid-cols-[1fr_88px_1fr] gap-2">
+                <div className="mb-2 flex items-start gap-2">
+                <div className="grid min-w-0 flex-1 grid-cols-[1fr_88px_1fr] gap-2">
                   <select
                     value={branch.factId}
                     onChange={(event) =>
@@ -259,6 +260,18 @@ function ConditionalCard({ knotId, block }: { knotId: string; block: Conditional
                     value={branch.value}
                     onChange={(value) => story.updateBranch(knotId, block.id, branch.id, { value })}
                   />
+                </div>
+                {block.branches.filter((item) => item.kind === "if").length > 1 && (
+                  <button
+                    type="button"
+                    title="Delete branch"
+                    aria-label="Delete branch"
+                    onClick={() => story.removeBranch(knotId, block.id, branch.id)}
+                    className="shrink-0 rounded px-1.5 py-1 text-xs text-muted hover:bg-paper hover:text-danger"
+                  >
+                    ×
+                  </button>
+                )}
                 </div>
               )}
               <BlockList knotId={knotId} parentId={branch.id} blocks={branch.body} />

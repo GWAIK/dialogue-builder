@@ -171,6 +171,20 @@ export function StoryProvider({ children }: { children: ReactNode }) {
           branches.splice(elseIndex === -1 ? branches.length : elseIndex, 0, branch);
           return replaceBlock(current, id, blockId, { ...block, branches });
         }),
+      removeBranch: (id, blockId, branchId) =>
+        setStory((current) => {
+          const found = findKnot(current, id);
+          if (!found) return current;
+          const block = findBlock(found.knot.blocks, blockId);
+          if (!block || block.type !== "conditional") return current;
+          const target = block.branches.find((branch) => branch.id === branchId);
+          const ifCount = block.branches.filter((branch) => branch.kind === "if").length;
+          if (!target || target.kind !== "if" || ifCount < 2) return current;
+          return replaceBlock(current, id, blockId, {
+            ...block,
+            branches: block.branches.filter((branch) => branch.id !== branchId),
+          });
+        }),
       addLineCommand: (id, block, type) => {
         if (block.commands.some((command) => command.type === type && type !== "sound")) return;
         patchLine(id, { ...block, commands: [...block.commands, createCommand(type)] });

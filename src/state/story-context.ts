@@ -34,6 +34,7 @@ export interface StoryApi {
     patch: { factId?: string; op?: "==" | "!=" | ">" | "<" | ">=" | "<="; value?: string },
   ) => void;
   addCondition: (knotId: string, blockId: string) => void;
+  removeBranch: (knotId: string, blockId: string, branchId: string) => void;
   addLineCommand: (knotId: string, block: LineBlock, type: Command["type"]) => void;
   updateCommand: (knotId: string, block: LineBlock, command: Command) => void;
   removeCommand: (knotId: string, block: LineBlock, commandId: string) => void;

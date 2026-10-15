@@ -115,7 +115,7 @@ Create the fact on the left first. If the fact is missing, the export uses `unde
 
 - Each branch is a fact, a comparison (`==`, `!=`, `>`, `<`, `>=`, `<=`), and a value.
 - **else** is the fallback. It is omitted from the file when it has no blocks.
-- **+ Branch** adds another comparison before `else`.
+- **+ Branch** adds another comparison before `else`. **×** on that comparison deletes it. The first comparison and `else` stay.
 - The blocks under a branch are written only for that branch.
 
 After a choice group, the condition is a gather. It runs once, after whichever choice was taken:
