@@ -87,16 +87,26 @@ export function Sidebar() {
                 const name = knotName(level, knot);
                 const selected = knot.id === api.knotId;
                 return (
-                  <button
-                    key={knot.id}
-                    type="button"
-                    onClick={() => api.selectKnot(knot.id)}
-                    className={`block w-full truncate rounded px-2 py-1 text-left font-mono text-sm ${
-                      selected ? "bg-gold text-paper" : "text-ink hover:bg-paper"
-                    } ${dupes.has(name) ? "outline outline-1 outline-danger" : ""}`}
-                  >
-                    {name}
-                  </button>
+                  <div key={knot.id} className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => api.selectKnot(knot.id)}
+                      className={`min-w-0 flex-1 truncate rounded px-2 py-1 text-left font-mono text-sm ${
+                        selected ? "bg-gold text-paper" : "text-ink hover:bg-paper"
+                      } ${dupes.has(name) ? "outline outline-1 outline-danger" : ""}`}
+                    >
+                      {name}
+                    </button>
+                    <button
+                      type="button"
+                      title={`Delete ${name}`}
+                      aria-label={`Delete ${name}`}
+                      onClick={() => api.removeKnot(knot.id)}
+                      className="shrink-0 rounded px-1.5 py-1 text-xs text-muted hover:bg-paper hover:text-danger"
+                    >
+                      ×
+                    </button>
+                  </div>
                 );
               })}
             </div>
