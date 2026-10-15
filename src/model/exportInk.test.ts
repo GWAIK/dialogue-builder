@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { exportStory } from "./exportInk.ts";
-import { createCommand, exampleStory } from "./story.ts";
+import { createCommand, exampleStory, showcaseStory } from "./story.ts";
 import type { LineBlock, Story } from "./types.ts";
 
 const PAPER = `=== level1_paper ===
@@ -44,5 +44,29 @@ describe("exportStory", () => {
     expect(level?.contents).toBe(
       ["=== level2_hall ===", "The line dies. # shake # go: hallway", "-> END", ""].join("\n"),
     );
+  });
+
+  it("exports every tool in the stairwell scene", () => {
+    const files = exportStory(showcaseStory());
+    const story = files[0].contents;
+    const level = files.find((file) => file.path === "levels/level-1.ink")?.contents ?? "";
+    expect(story).toContain('VAR reply = ""');
+    expect(story).toContain("VAR calls = 0");
+    expect(story).toContain("VAR line_open = true");
+    expect(story).toContain("INCLUDE levels/level-2.ink");
+    expect(level).toContain("=== level1_stairwell ===");
+    expect(level).toContain("The stairwell smells like wet concrete. The phone is already warm.");
+    expect(level).toContain("# sound: audio/phone/open");
+    expect(level).toContain("# shake");
+    expect(level).toContain("# event: surprised");
+    expect(level).toContain('~ reply = "surprised"');
+    expect(level).toContain("~ calls = 1");
+    expect(level).toContain("~ line_open = false");
+    expect(level).toContain('- { reply == "surprised":');
+    expect(level).toContain('- reply == "cover":');
+    expect(level).toContain("- else:");
+    expect(level).toContain("# go: stairwell_exit");
+    expect(level).toContain("# level: level-2");
+    expect(level).toContain("# sound: audio/phone/close # quit");
   });
 });

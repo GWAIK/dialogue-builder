@@ -7,7 +7,7 @@ import {
   createLine,
   createSetFact,
   defaultInitial,
-  exampleStory,
+  showcaseStory,
   findKnot,
   insertBlock,
   moveBlock,
@@ -23,12 +23,12 @@ const STORAGE_KEY = "cacophobia-dialogue-builder";
 function loadStory(): Story {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return exampleStory();
+    if (!raw) return showcaseStory();
     const parsed = JSON.parse(raw) as Story;
-    if (!parsed.levels?.length) return exampleStory();
+    if (!parsed.levels?.length) return showcaseStory();
     return parsed;
   } catch {
-    return exampleStory();
+    return showcaseStory();
   }
 }
 
@@ -197,7 +197,7 @@ export function StoryProvider({ children }: { children: ReactNode }) {
       removeCommand: (id, block, commandId) =>
         patchLine(id, { ...block, commands: block.commands.filter((command) => command.id !== commandId) }),
       loadExample: () => {
-        const sample = exampleStory();
+        const sample = showcaseStory();
         setStory(sample);
         setKnotId(firstKnot(sample));
       },

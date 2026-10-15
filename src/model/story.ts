@@ -350,6 +350,201 @@ export function exampleStory(): Story {
   };
 }
 
+export function showcaseStory(): Story {
+  const reply: Fact = { id: "fact-reply", name: "reply", type: "string", initial: "" };
+  const calls: Fact = { id: "fact-calls", name: "calls", type: "number", initial: "0" };
+  const lineOpen: Fact = { id: "fact-line-open", name: "line_open", type: "boolean", initial: "true" };
+  const surprised: ChoiceBlock = {
+    id: "choice-surprised",
+    type: "choice",
+    displayText: "I'm surprised she actually kept the paper.",
+    speaker: "Mara",
+    spokenText: "I'm surprised she actually kept the paper.",
+    event: "surprised",
+    continuation: [
+      { id: "set-surprised", type: "setFact", factId: reply.id, value: "surprised" },
+      { id: "set-calls", type: "setFact", factId: calls.id, value: "1" },
+      {
+        id: "line-hid",
+        type: "line",
+        speaker: "Unknown",
+        text: "Then you already know why she hid it.",
+        commands: [],
+      },
+      {
+        id: "line-shake",
+        type: "line",
+        speaker: "Mara",
+        text: "The light just jumped.",
+        commands: [{ id: "cmd-shake", type: "shake" }],
+      },
+    ],
+  };
+  const cover: ChoiceBlock = {
+    id: "choice-cover",
+    type: "choice",
+    displayText: "They moved fast to cover this one.",
+    speaker: "Mara",
+    spokenText: "They moved fast to cover this one.",
+    event: "cover_up",
+    continuation: [
+      { id: "set-cover", type: "setFact", factId: reply.id, value: "cover" },
+      { id: "set-line-closed", type: "setFact", factId: lineOpen.id, value: "false" },
+      {
+        id: "line-faster",
+        type: "line",
+        speaker: "Unknown",
+        text: "Faster than the last time.",
+        commands: [],
+      },
+    ],
+  };
+  const hangup: ChoiceBlock = {
+    id: "choice-hangup",
+    type: "choice",
+    displayText: "Hang up. We're done.",
+    speaker: "Mara",
+    spokenText: "I'm hanging up.",
+    event: "hangup",
+    continuation: [
+      { id: "set-hangup", type: "setFact", factId: reply.id, value: "hangup" },
+      { id: "set-line-dead", type: "setFact", factId: lineOpen.id, value: "false" },
+    ],
+  };
+  const conditional: ConditionalBlock = {
+    id: "cond-reply",
+    type: "conditional",
+    branches: [
+      {
+        id: "branch-surprised",
+        kind: "if",
+        factId: reply.id,
+        op: "==",
+        value: "surprised",
+        body: [
+          {
+            id: "line-aloud",
+            type: "line",
+            speaker: "Mara",
+            text: "I should not have said that out loud.",
+            commands: [],
+          },
+          {
+            id: "line-go",
+            type: "line",
+            speaker: "Mara",
+            text: "Meet me past the fire door.",
+            commands: [{ id: "cmd-go", type: "go", scene: "stairwell_exit" }],
+          },
+        ],
+      },
+      {
+        id: "branch-cover",
+        kind: "if",
+        factId: reply.id,
+        op: "==",
+        value: "cover",
+        body: [
+          {
+            id: "line-other-stairs",
+            type: "line",
+            speaker: "Mara",
+            text: "Then we use the other stairs.",
+            commands: [],
+          },
+          {
+            id: "line-level",
+            type: "line",
+            speaker: "Unknown",
+            text: "The roof door is still chained.",
+            commands: [{ id: "cmd-level", type: "level", level: "level-2" }],
+          },
+        ],
+      },
+      {
+        id: "branch-else",
+        kind: "else",
+        factId: "",
+        op: "==",
+        value: "",
+        body: [
+          {
+            id: "line-quit",
+            type: "line",
+            speaker: "",
+            text: "The line clicks dead.",
+            commands: [
+              { id: "cmd-close", type: "sound", path: "audio/phone/close" },
+              { id: "cmd-quit", type: "quit" },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+  return {
+    facts: [reply, calls, lineOpen],
+    levels: [
+      {
+        id: "level-1",
+        number: 1,
+        knots: [
+          {
+            id: "knot-stairwell",
+            suffix: "stairwell",
+            blocks: [
+              {
+                id: "line-narration",
+                type: "line",
+                speaker: "",
+                text: "The stairwell smells like wet concrete. The phone is already warm.",
+                commands: [],
+              },
+              {
+                id: "line-name",
+                type: "line",
+                speaker: "Mara",
+                text: "Don't say her name out loud.",
+                commands: [{ id: "cmd-open", type: "sound", path: "audio/phone/open" }],
+              },
+              {
+                id: "line-kept",
+                type: "line",
+                speaker: "Unknown",
+                text: "She kept the paper.",
+                commands: [],
+              },
+              surprised,
+              cover,
+              hangup,
+              conditional,
+            ],
+          },
+        ],
+      },
+      {
+        id: "level-2",
+        number: 2,
+        knots: [
+          {
+            id: "knot-roof",
+            suffix: "roof",
+            blocks: [
+              {
+                id: "line-roof",
+                type: "line",
+                speaker: "Mara",
+                text: "The chain is cut. Don't look at the billboard.",
+                commands: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+}
+
 export function nextLevelNumber(story: Story): number {
   return story.levels.reduce((max, level) => Math.max(max, level.number), 0) + 1;
 }

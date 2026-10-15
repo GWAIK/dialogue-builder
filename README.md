@@ -8,7 +8,7 @@ npm run dev
 npm test
 ```
 
-Open the URL Vite prints (usually `http://127.0.0.1:5173/`). The story is saved in this browser automatically. **Load sample** replaces it with the built-in `level1_paper` example.
+Open the URL Vite prints (usually `http://127.0.0.1:5173/`). The story is saved in this browser automatically. **Load sample** replaces it with `level1_stairwell`, a phone call that uses every tool: narration, speech, sound, shake, choices, events, string/number/boolean facts, a condition with an extra branch and else, then go, level, and quit. `level2_roof` is the level that call can open.
 
 ## Screen
 
